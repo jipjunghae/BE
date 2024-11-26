@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from database import Base, engine
-from routers import course, lecture, notification
+from routers import course, lecture, notification, task
 
 # 데이터베이스 테이블 생성
 Base.metadata.create_all(bind=engine)
@@ -11,4 +11,5 @@ app = FastAPI()
 # 라우터 등록
 app.include_router(course.router)
 app.include_router(lecture.router)
-app.include_router(notification.router) 
+app.include_router(notification.router)
+app.include_router(task.router) 

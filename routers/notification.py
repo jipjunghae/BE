@@ -26,3 +26,18 @@ def create_notification(notification: NotificationCreate, db: Session = Depends(
     db.commit()
     db.refresh(db_notification)
     return db_notification
+
+# 알림 읽음 상태 업데이트
+@router.put("/notification/{notification_id}/read", response_model=dict)
+def mark_notification_as_read(notification_id: int, db: Session = Depends(get_db)):
+    # 알림 조회
+    notification = db.query(Notification).filter(Notification.id == notification_id).first()
+    if not notification:
+        raise HTTPException(status_code=404, detail="Notification not found")
+    
+    # 읽음 상태 업데이트
+    notification.is_read = True
+    db.commit()
+    db.refresh(notification)
+
+    return {"message": f"Notification {notification_id} marked as read"}
